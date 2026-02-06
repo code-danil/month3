@@ -44,16 +44,9 @@ def app(page: ft.Page):
     # button.color = ft.Colors.GREEN_900
     btn = ft.TextButton("Отправить", on_click=change)
 
-
     user_input = ft.TextField(label="Enter name", on_submit=change)
-    row = ft.Row(
-        [user_input, btn],
-        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
-    )
-
-    main_row = ft.Row(row, icon_button), alignment=ft.MainAxisAlignment.SPACE_BETWEEN
-
-    page.add(plain_text, row, history_text, delete_button)
+    row = ft.Row([user_input, btn, history_text, icon_button],alignment=ft.MainAxisAlignment.START)
+    page.add(plain_text, row, delete_button)
 
 
 ft.app(app)
