@@ -1,11 +1,21 @@
+from datetime import datetime
+
 import flet as ft
 
-from datetime import datetime
 
 def app(page: ft.Page):
     # button = ft.Button(content="Кнопка")
     plain_text = ft.Text(value="Hello world!")
     # page.theme_mode = ft.ThemeMode.LIGHT
+    history = []
+
+    def clear_history(e):
+        history.clear()
+        history_text.value = ""
+
+    delete_button = ft.IconButton(icon=ft.Icons.DELETE, on_click=clear_history)
+
+    history_text = ft.Text()
 
     def change_theme(e):
         if page.theme_mode == ft.ThemeMode.DARK:
@@ -15,30 +25,35 @@ def app(page: ft.Page):
 
     icon_button = ft.IconButton(icon=ft.Icons.SMART_BUTTON, on_click=change_theme)
 
-
     def change(e):
-        name = user_input.value.strip()
-        user_input.value = ""j
+        txt = user_input.value.strip()
+        user_input.value = ""
+        history.append(txt)
+        print(history)
+        history_text.value = "История имён: \n" + ", \n".join(history)
+        date = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
 
-        
-        if name:
-            now = datetime.now().strftime("%Y:%m:%d - %H:%M:%S")
+        if txt:
             plain_text.color = None
-            plain_text.value = f"{now} - Привет, {name}!"
+            plain_text.value = f"{date} Hello {txt}"
         else:
-            plain_text.value = "Введите правельное имя"
+            plain_text.value = "Введите правильное имя!"
             plain_text.color = ft.Colors.RED
- 
 
     # button.content = "Другая кнопка"
     # button.color = ft.Colors.GREEN_900
     btn = ft.TextButton("Отправить", on_click=change)
-    user_input = ft.TextField(label="enter name", on_submit=change)
-    page.add(
-        plain_text,
-        user_input,
-        btn,
-        icon_button,
+
+
+    user_input = ft.TextField(label="Enter name", on_submit=change)
+    row = ft.Row(
+        [user_input, btn],
+        alignment=ft.MainAxisAlignment.SPACE_BETWEEN,
     )
+
+    main_row = ft.Row(row, icon_button), alignment=ft.MainAxisAlignment.SPACE_BETWEEN
+
+    page.add(plain_text, row, history_text, delete_button)
+
 
 ft.app(app)
